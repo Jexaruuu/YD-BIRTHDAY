@@ -95,7 +95,7 @@ const Menu5 = () => {
         }}>
           <div className="menu5-heading" style={{
             fontSize: '5.5vw',
-            fontWeight: '900',
+            fontWeight: '900',  
             lineHeight: '1.1',
             letterSpacing: '-0.04em',
             maxWidth: '40vw',
