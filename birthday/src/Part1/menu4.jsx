@@ -1,13 +1,50 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const Menu4 = () => {
   const experiences = [
-    { period: "", role: "Joy & Happiness", company: "Sana lahat ng gusto mo sa life is mangyari, lalo na yung mga bagay na kasama mo si baby Aqui." },
-    { period: "", role: "Good Health & Energy", company: "Sana palagi ikaw na healthy and ganon din sa family mo." },
-    { period: "", role: "Success & Abundance", company: "Sana patuloy kang blessed sa career at personal endeavors mo, unli success para sayo!" },
-    { period: "", role: "Peace of Mind", company: "Sana less stress at more chill moments lang sa araw-araw, you deserve all the inner peace." },
-    { period: "", role: "Endless Love & Smiles", company: "Sana lagi kang masaya, surrounded by people who love and cherish you truly every single day." }
+    { period: "", role: "Joy & Happiness", company: "Sana lahat ng gusto mo sa life is mangyari, lalo na yung mga bagay na kasama mo si baby Aqui.", audio: "wish1.mp3" },
+    { period: "", role: "Good Health & Energy", company: "Sana palagi ikaw na healthy and ganon din sa family mo.", audio: "wish2.mp3" },
+    { period: "", role: "Success & Abundance", company: "Sana patuloy kang blessed sa career mo at personal endeavors mo, unli success para sayo!", audio: "wish3.mp3" },
+    { period: "", role: "Peace of Mind", company: "Sana less stress at more chill moments lang sa araw-araw, you deserve all the inner peace.", audio: "wish4.mp3" },
+    { period: "", role: "Endless Love & Smiles", company: "Sana lagi kang masaya, surrounded by people who love and cherish you truly every single day.", audio: "wish5.mp3" }
   ];
+
+  const [activeIndex, setActiveIndex] = useState(null);
+  const audioRefs = useRef([]);
+
+  const togglePlay = (index) => {
+    const currentAudio = audioRefs.current[index];
+    if (!currentAudio) return;
+
+    if (activeIndex === index) {
+      if (currentAudio.paused) {
+        currentAudio.play();
+      } else {
+        currentAudio.pause();
+        setActiveIndex(null);
+      }
+    } else {
+      audioRefs.current.forEach((aud, i) => {
+        if (aud) {
+          aud.pause();
+          aud.currentTime = 0;
+        }
+      });
+      currentAudio.play();
+      setActiveIndex(index);
+    }
+  };
+
+  useEffect(() => {
+    const currentAudioRefs = audioRefs.current;
+    return () => {
+      currentAudioRefs.forEach((aud) => {
+        if (aud) {
+          aud.pause();
+        }
+      });
+    };
+  }, []);
 
   return (
     <div style={{
@@ -23,8 +60,27 @@ const Menu4 = () => {
       justifyContent: 'space-between'
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
         
+        .wish-item {
+          transition: all 0.25s ease;
+        }
+        .wish-item:hover {
+          background-color: rgba(255, 255, 255, 0.05);
+          padding-left: 1vw;
+          padding-right: 1vw;
+          border-radius: 8px;
+        }
+
+        @keyframes pulse-text {
+          0%, 100% { opacity: 0.6; transform: translateX(0); }
+          50% { opacity: 1; transform: translateX(-4px); }
+        }
+
+        .press-label {
+          animation: pulse-text 1.5s infinite ease-in-out;
+        }
+
         @media (max-width: 768px) {
           .menu4-container {
             padding: 6vw !important;
@@ -123,24 +179,93 @@ const Menu4 = () => {
             maxWidth: '45vw',
             width: '100%'
           }}>
-            {experiences.map((item, index) => (
-              <div key={index} style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'flex-start',
-                borderBottom: '1px solid rgba(239, 239, 208, 0.15)',
-                paddingBottom: '1.2vw'
-              }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right', width: '100%' }}>
-                  <span className="menu4-item-role" style={{ fontSize: '1.2vw', fontWeight: '700' }}>
-                    {item.role}
-                  </span>
-                  <span className="menu4-item-company" style={{ fontSize: '1.05vw', fontWeight: '400', opacity: '0.7' }}>
-                    {item.company}
-                  </span>
+            {experiences.map((item, index) => {
+              const isPlaying = activeIndex === index;
+              return (
+                <div 
+                  key={index} 
+                  className="wish-item"
+                  onClick={() => togglePlay(index)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    borderBottom: '1px solid rgba(239, 239, 208, 0.15)',
+                    paddingBottom: '1.2vw',
+                    paddingTop: '0.5vw',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <audio 
+                    ref={(el) => (audioRefs.current[index] = el)} 
+                    src={item.audio} 
+                    onEnded={() => setActiveIndex(null)}
+                  />
+
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1vw',
+                    marginRight: '2vw',
+                    flexShrink: 0
+                  }}>
+                    {!isPlaying && (
+                      <span className="press-label" style={{
+                        color: '#efefd0',
+                        fontSize: '0.8vw',
+                        fontWeight: '600',
+                        letterSpacing: '0.05em',
+                        whiteSpace: 'nowrap',
+                        opacity: '0.85'
+                      }}>
+                        press to play →
+                      </span>
+                    )}
+
+                    <div style={{
+                      width: '3.2vw',
+                      height: '3.2vw',
+                      minWidth: '38px',
+                      minHeight: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: isPlaying ? '#efefd0' : 'rgba(239, 239, 208, 0.15)',
+                      color: isPlaying ? '#072ac8' : '#efefd0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: isPlaying ? '0 0 15px rgba(239, 239, 208, 0.4)' : 'none',
+                      transition: 'all 0.2s ease'
+                    }}>
+                      {isPlaying ? (
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '14px' }}>
+                          <span style={{ width: '3px', backgroundColor: '#072ac8', animation: 'bounce 0.6s infinite alternate', height: '100%' }}></span>
+                          <span style={{ width: '3px', backgroundColor: '#072ac8', animation: 'bounce 0.4s infinite alternate', height: '60%' }}></span>
+                          <span style={{ width: '3px', backgroundColor: '#072ac8', animation: 'bounce 0.8s infinite alternate', height: '80%' }}></span>
+                        </div>
+                      ) : (
+                        <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor" style={{ marginLeft: '2px' }}>
+                          <path d="M11 6.13397C11.6667 6.51887 11.6667 7.48113 11 7.86603L2 13.0622C1.33333 13.4471 0.5 12.966 0.5 12.1962L0.5 1.80385C0.5 1.03405 1.33333 0.552923 2 0.937822L11 6.13397Z" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right', width: '100%' }}>
+                    <span className="menu4-item-role" style={{ 
+                      fontSize: '1.2vw', 
+                      fontWeight: '700',
+                      color: isPlaying ? '#ffffff' : '#efefd0',
+                      transition: 'color 0.2s ease'
+                    }}>
+                      {item.role}
+                    </span>
+                    <span className="menu4-item-company" style={{ fontSize: '1.05vw', fontWeight: '400', opacity: '0.7' }}>
+                      {item.company}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
