@@ -9,7 +9,8 @@ const Menu2 = () => {
   const images = [
     "1.jpg",
     "2.jpg",
-    "3.jpg"
+    "3.jpg",
+    "4.jpg",
   ];
 
   useEffect(() => {
