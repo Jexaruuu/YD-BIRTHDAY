@@ -5,6 +5,9 @@ const Menu2 = () => {
   const [nextImageIndex, setNextImageIndex] = useState(null);
   const [transitioning, setTransitioning] = useState(false);
   const [isBlurred, setIsBlurred] = useState(true);
+  const [showImages, setShowImages] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const fullText = "tap/click to open";
 
   const images = [
     "1.jpg",
@@ -13,7 +16,46 @@ const Menu2 = () => {
     "4.jpg",
   ];
 
+  const coverImage = "bluegift.png";
+
   useEffect(() => {
+    if (showImages) return;
+
+    let index = 0;
+    let isDeleting = false;
+    let timer;
+
+    const type = () => {
+      if (!isDeleting) {
+        index++;
+        setDisplayText(fullText.substring(0, index));
+        if (index === fullText.length) {
+          timer = setTimeout(() => {
+            isDeleting = true;
+            type();
+          }, 1500);
+          return;
+        }
+      } else {
+        index--;
+        setDisplayText(fullText.substring(0, index));
+        if (index === 0) {
+          isDeleting = false;
+          timer = setTimeout(type, 500);
+          return;
+        }
+      }
+      timer = setTimeout(type, isDeleting ? 70 : 120);
+    };
+
+    timer = setTimeout(type, 120);
+
+    return () => clearTimeout(timer);
+  }, [showImages]);
+
+  useEffect(() => {
+    if (!showImages) return;
+
     const interval = setInterval(() => {
       const nextIndex = (currentImageIndex + 1) % images.length;
       setNextImageIndex(nextIndex);
@@ -27,7 +69,7 @@ const Menu2 = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [currentImageIndex, images.length]);
+  }, [showImages, currentImageIndex, images.length]);
 
   return (
     <div style={{
@@ -45,6 +87,11 @@ const Menu2 = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
         
+        @keyframes blinkCursor {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+
         @media (max-width: 768px) {
           .menu2-container {
             padding: 6vw !important;
@@ -112,43 +159,92 @@ const Menu2 = () => {
           paddingLeft: '0',
           paddingRight: '0'
         }}>
-          <div className="menu2-image-wrapper" style={{
-            width: '32vw',
-            height: '32vw',
-            borderRadius: '2rem',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'relative',
-            overflow: 'hidden',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-            flexShrink: 0
-          }}>
-            <img 
-              src={images[currentImageIndex]} 
-              alt="Custom" 
-              style={{
-                position: 'absolute',
+          <div 
+            className="menu2-image-wrapper" 
+            onClick={() => setShowImages(true)}
+            style={{
+              width: '32vw',
+              height: '32vw',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'relative',
+              overflow: 'visible',
+              flexShrink: 0,
+              cursor: !showImages ? 'pointer' : 'default'
+            }}
+          >
+            {!showImages ? (
+              <>
+                <img 
+                  src={coverImage} 
+                  alt="Cover" 
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain'
+                  }} 
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '-2.5vw',
+                  fontSize: '1vw',
+                  fontWeight: '700',
+                  color: '#efefd0',
+                  letterSpacing: '0.05em',
+                  whiteSpace: 'nowrap',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
+                  {displayText}
+                  <span style={{
+                    display: 'inline-block',
+                    width: '2px',
+                    height: '1.1vw',
+                    backgroundColor: '#efefd0',
+                    marginLeft: '3px',
+                    animation: 'blinkCursor 0.8s infinite'
+                  }}></span>
+                </div>
+              </>
+            ) : (
+              <div style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
-                transform: transitioning ? 'scale(1.08)' : 'scale(1)',
-                transition: 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)'
-              }} 
-            />
-            {nextImageIndex !== null && (
-              <img 
-                src={images[nextImageIndex]} 
-                alt="Custom Next" 
-                style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  opacity: transitioning ? 1 : 0,
-                  transition: 'opacity 0.8s ease-in-out'
-                }} 
-              />
+                borderRadius: '2rem',
+                position: 'relative',
+                overflow: 'hidden',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+              }}>
+                <img 
+                  src={images[currentImageIndex]} 
+                  alt="Custom" 
+                  style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transform: transitioning ? 'scale(1.08)' : 'scale(1)',
+                    transition: 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)'
+                  }} 
+                />
+                {nextImageIndex !== null && (
+                  <img 
+                    src={images[nextImageIndex]} 
+                    alt="Custom Next" 
+                    style={{
+                      position: 'absolute',
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      opacity: transitioning ? 1 : 0,
+                      transition: 'opacity 0.8s ease-in-out'
+                    }} 
+                  />
+                )}
+              </div>
             )}
           </div>
 

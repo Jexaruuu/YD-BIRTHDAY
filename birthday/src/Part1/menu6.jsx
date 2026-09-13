@@ -288,8 +288,8 @@ const Menu6 = () => {
                 style={{
                   width: '8vw',
                   height: 'auto',
-                  marginTop: '1.8vw',
-                  marginLeft: '-2vw',
+                  marginTop: '-1.9vw',
+                  marginLeft: '-6.5vw',
                   objectFit: 'cover'
                 }}
               />
