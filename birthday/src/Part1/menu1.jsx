@@ -174,14 +174,43 @@ const Menu1 = () => {
   }, []);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch((e) => {
-        setIsPlaying(false);
-      });
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    audio.load();
+    const playPromise = audio.play();
+    
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          setIsPlaying(false);
+        });
     }
   }, [currentAlbumIndex, currentTrackIndex]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const attemptAutoplay = () => {
+      audio.load();
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(() => {
+            setIsPlaying(false);
+          });
+      }
+    };
+
+    attemptAutoplay();
+  }, []);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
