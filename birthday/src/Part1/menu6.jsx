@@ -35,14 +35,21 @@ const Menu6 = () => {
     'yoda4.png',
   ];
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const btsMedia = [
+    { type: 'video', src: 'bts.mp4', title: 'Mini Behind The Scene', subtitle: 'Triny ko lang hehe.' },
+    { type: 'image', src: 'bts.jpg', title: 'Gwen & Spidey', subtitle: 'Cute nila diba?' },
+    { type: 'image', src: 'bts2.jpg', title: 'Baby Yoda', subtitle: 'Yooooodaaaaaa!' },
+    { type: 'image', src: 'bts3.jpg', title: 'Hanging Spidey', subtitle: 'Okay lang yan sya, hindi sya mahuhulog, Ako oo. hehe' }
+  ];
 
-  const handleImageClick = (src) => {
-    setSelectedImage(src);
+  const [selectedMedia, setSelectedMedia] = useState(null);
+
+  const handleMediaClick = (item) => {
+    setSelectedMedia(item);
   };
 
   const closeModal = () => {
-    setSelectedImage(null);
+    setSelectedMedia(null);
   };
 
   useEffect(() => {
@@ -75,11 +82,11 @@ const Menu6 = () => {
         .menu6-gallery-wrapper {
           width: 100%;
           margin-top: 0;
-          margin-bottom: 8vw;
+          margin-bottom: 3vw;
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(6vw, 1fr));
           gap: 1.5vw;
-          max-height: 35vh;
+          max-height: 28vh;
           overflow-y: auto;
           padding-right: 0.5vw;
           scrollbar-width: thin;
@@ -145,6 +152,111 @@ const Menu6 = () => {
           opacity: 1;
         }
 
+        /* Sleek Behind the Scenes Section Styling */
+        .bts-section-container {
+          width: 100%;
+          margin-bottom: 3vw;
+          display: flex;
+          flex-direction: column;
+          gap: 1vw;
+        }
+
+        .bts-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 0.95vw;
+          opacity: 0.85;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          border-bottom: 1px solid rgba(239, 239, 208, 0.15);
+          padding-bottom: 0.5vw;
+        }
+
+        .bts-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.2vw;
+        }
+
+        .bts-item {
+          position: relative;
+          height: 8.5vw;
+          border-radius: 1vw;
+          overflow: hidden;
+          cursor: pointer;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(239, 239, 208, 0.15);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bts-item:hover {
+          transform: translateY(-5px);
+          border-color: rgba(239, 239, 208, 0.5);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .bts-item img, .bts-item video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: brightness(0.8);
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+        }
+
+        .bts-item:hover img, .bts-item:hover video {
+          transform: scale(1.08);
+          filter: brightness(0.95);
+        }
+
+        .bts-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(7, 42, 200, 0.85) 10%, rgba(0, 0, 0, 0.2) 80%);
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 0.8vw 1vw;
+        }
+
+        .bts-title {
+          font-size: 0.85vw;
+          font-weight: 700;
+          color: #efefd0;
+          margin-bottom: 0.1vw;
+        }
+
+        .bts-subtitle {
+          font-size: 0.65vw;
+          opacity: 0.75;
+          letter-spacing: 0.02em;
+        }
+
+        .bts-play-badge {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 2.5vw;
+          height: 2.5vw;
+          background: rgba(7, 42, 200, 0.8);
+          border: 1px solid rgba(239, 239, 208, 0.4);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #efefd0;
+          font-size: 1vw;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .bts-item:hover .bts-play-badge {
+          transform: translate(-50%, -50%) scale(1.1);
+          background: rgba(7, 42, 200, 1);
+        }
+
         .menu6-image-modal {
           position: fixed;
           top: 0;
@@ -165,7 +277,7 @@ const Menu6 = () => {
           to { opacity: 1; }
         }
 
-        .menu6-image-modal img {
+        .menu6-image-modal img, .menu6-image-modal video {
           max-width: 85vw;
           max-height: 85vh;
           object-fit: contain;
@@ -183,7 +295,7 @@ const Menu6 = () => {
         @media (max-width: 768px) {
           .menu6-container {
             padding: 6vw !important;
-            gap: 3rem !important;
+            gap: 2rem !important;
           }
           .menu6-top-bar {
             flex-direction: column !important;
@@ -195,7 +307,7 @@ const Menu6 = () => {
           .menu6-main-content {
             flex-direction: column !important;
             align-items: flex-start !important;
-            gap: 8vw !important;
+            gap: 6vw !important;
           }
           .menu6-heading {
             font-size: 16vw !important;
@@ -208,7 +320,28 @@ const Menu6 = () => {
           .menu6-gallery-wrapper {
             grid-template-columns: repeat(auto-fill, minmax(14vw, 1fr));
             gap: 2.5vw;
-            max-height: 40vh;
+            max-height: 32vh;
+          }
+          .bts-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5vw;
+          }
+          .bts-item {
+            height: 30vw;
+          }
+          .bts-header {
+            font-size: 2.8vw;
+          }
+          .bts-title {
+            font-size: 2.8vw;
+          }
+          .bts-subtitle {
+            font-size: 2.1vw;
+          }
+          .bts-play-badge {
+            width: 8vw;
+            height: 8vw;
+            font-size: 3.5vw;
           }
         }
       `}</style>
@@ -236,20 +369,21 @@ const Menu6 = () => {
         <div style={{
           fontSize: '1vw',
           textAlign: 'center',
-          marginTop: '3vw',
-          marginBottom: '1.5vw',
+          marginTop: '1.5vw',
+          marginBottom: '1vw',
           opacity: 0.7,
           letterSpacing: '0.05em'
         }}>
           ✨ Good old memories ✨
         </div>
 
+        {/* Gallery Grid */}
         <div className="menu6-gallery-wrapper">
           {carouselImages.map((src, index) => (
             <div
               key={index}
               className="menu6-gallery-item"
-              onClick={() => handleImageClick(src)}
+              onClick={() => handleMediaClick({ type: 'image', src })}
               style={{ animationDelay: `${index * 0.03}s` }}
             >
               <img
@@ -259,6 +393,36 @@ const Menu6 = () => {
               />
             </div>
           ))}
+        </div>
+
+        {/* Behind the Scenes Section (1 MP4 Video & 3 Images) */}
+        <div className="bts-section-container">
+          <div className="bts-header">
+            <span>🎬 Behind The Scenes</span>
+            <span style={{ opacity: 0.6, fontSize: '0.85em' }}></span>
+          </div>
+          <div className="bts-grid">
+            {btsMedia.map((item, index) => (
+              <div
+                key={index}
+                className="bts-item"
+                onClick={() => handleMediaClick(item)}
+              >
+                {item.type === 'video' ? (
+                  <>
+                    <video src={item.src} muted loop playsInline />
+                    <div className="bts-play-badge">▶</div>
+                  </>
+                ) : (
+                  <img src={item.src} alt={item.title} draggable={false} />
+                )}
+                <div className="bts-overlay">
+                  <div className="bts-title">{item.title}</div>
+                  <div className="bts-subtitle">{item.subtitle}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="menu6-main-content" style={{
@@ -315,16 +479,26 @@ const Menu6 = () => {
           </div>
         </div>
 
-        <div style={{ height: '2vw' }}></div>
+        <div style={{ height: '1vw' }}></div>
       </div>
 
-      {selectedImage && (
+      {/* Modal Preview for Clicked Media */}
+      {selectedMedia && (
         <div className="menu6-image-modal" onClick={closeModal}>
-          <img
-            src={selectedImage}
-            alt="enlarged"
-            onClick={(e) => e.stopPropagation()}
-          />
+          {selectedMedia.type === 'video' ? (
+            <video
+              src={selectedMedia.src}
+              controls
+              autoPlay
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <img
+              src={selectedMedia.src}
+              alt="enlarged"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
         </div>
       )}
     </div>

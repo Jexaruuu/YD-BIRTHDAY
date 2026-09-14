@@ -427,8 +427,8 @@ const Menu1 = () => {
                 onChange={handleVolumeChange} 
                 style={{ width: '4.5vw', accentColor: '#efefd0', cursor: 'pointer', height: '3px', background: 'rgba(239,239,208,0.3)', borderRadius: '2px', appearance: 'none' }}
               />
-            </div>
-          </div>
+            </div>         
+          </div>                           
         </div>
       </div>
 
