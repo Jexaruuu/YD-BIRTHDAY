@@ -4,7 +4,7 @@ const Menu1 = () => {
   const [charCount, setCharCount] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.8);
+  const [volume, setVolume] = useState(0.2);
   const [currentAlbumIndex, setCurrentAlbumIndex] = useState(5);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -427,8 +427,11 @@ const Menu1 = () => {
                 onChange={handleVolumeChange} 
                 style={{ width: '4.5vw', accentColor: '#efefd0', cursor: 'pointer', height: '3px', background: 'rgba(239,239,208,0.3)', borderRadius: '2px', appearance: 'none' }}
               />
+              <span style={{ fontSize: '0.75vw', opacity: '0.85', minWidth: '2.2vw', textAlign: 'right', fontWeight: '600' }}>
+                {Math.round(volume * 100)}%
+              </span>
             </div>         
-          </div>                           
+          </div>                    
         </div>
       </div>
 

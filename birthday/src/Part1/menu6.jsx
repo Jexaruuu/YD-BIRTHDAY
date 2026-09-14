@@ -36,7 +36,7 @@ const Menu6 = () => {
   ];
 
   const btsMedia = [
-    { type: 'video', src: 'bts.mp4', title: 'Mini Behind The Scene', subtitle: 'Triny ko lang hehe.' },
+    { type: 'video', src: 'bts.mp4', title: 'Mini Behind The Scene', subtitle: 'Triny ko lang, Tiktoker yarn? haha.' },
     { type: 'image', src: 'bts.jpg', title: 'Gwen & Spidey', subtitle: 'Cute nila diba?' },
     { type: 'image', src: 'bts2.jpg', title: 'Baby Yoda', subtitle: 'Yooooodaaaaaa!' },
     { type: 'image', src: 'bts3.jpg', title: 'Hanging Spidey', subtitle: 'Okay lang yan sya, hindi sya mahuhulog, Ako oo. hehe' }
